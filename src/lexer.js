@@ -88,8 +88,7 @@ class Lexer {
       this._nextToken();
       return;
     }
-    console.error(`Invalid token: Expected '${type}' found '${this.token().type}'`);
-    console.log(this._index);
+    console.error(`${this._index}: Invalid token: Expected '${type}' found '${this.token().type}'`);
     throw new Error('Parse Error');
   }
 
