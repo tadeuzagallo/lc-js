@@ -1,0 +1,24 @@
+{
+  "name": "lc-js",
+  "version": "0.0.1",
+  "description": "A λ-calculus interpreter written in JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tadeuzagallo/lc-js.git"
+  },
+  "keywords": [
+    "lambda-calculus",
+    "lambda",
+    "interpreter"
+  ],
+  "author": "Tadeu Zagallo <tadeuzagallo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tadeuzagallo/lc-js/issues"
+  },
+  "homepage": "https://github.com/tadeuzagallo/lc-js#readme"
+}
