@@ -10,13 +10,13 @@ class Abstraction {
 }
 
 class Application {
-  constructor(abstraction, value) {
-    this.abstraction = abstraction;
-    this.value = value;
+  constructor(lhs, rhs) {
+    this.lhs = lhs;
+    this.rhs = rhs;
   }
 
   toString() {
-    return `${this.abstraction.toString()} ${this.value.toString()}`;
+    return `${this.lhs.toString()} ${this.value.toString()}`;
   }
 }
 

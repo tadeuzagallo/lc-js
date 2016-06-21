@@ -5,13 +5,13 @@ const isValue = node => node instanceof AST.Abstraction;
 const eval = (ast, context={}) => {
   while (true) {
     if (ast instanceof AST.Application) {
-      if (isValue(ast.abstraction) && isValue(ast.value)) {
-        context[ast.abstraction.param.name] = ast.value;
-        ast = eval(ast.abstraction.body, context);
-      } else if (isValue(ast.abstraction)) {
-        ast.value = eval(ast.value, Object.assign({}, context));
+      if (isValue(ast.lhs) && isValue(ast.rhs)) {
+        context[ast.lhs.param.name] = ast.rhs;
+        ast = eval(ast.lhs.body, context);
+      } else if (isValue(ast.lhs)) {
+        ast.rhs = eval(ast.rhs, Object.assign({}, context));
       } else {
-        ast.abstraction = eval(ast.abstraction, context);
+        ast.lhs = eval(ast.lhs, context);
       }
     } else if (ast instanceof AST.Identifier) {
        ast = context[ast.name];
