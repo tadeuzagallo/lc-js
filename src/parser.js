@@ -7,26 +7,26 @@ class Parser {
   }
 
   parse() {
-    const result = this.parseTerm(Token.EOF);
+    const result = this.term(Token.EOF);
     this.lexer.match(Token.EOF);
     return result;
   }
 
-  parseTerm() {
+  term() {
     if (this.lexer.skip(Token.LAMBDA)) {
       const id = new AST.Identifier(this.lexer.token(Token.LCID).value);
       this.lexer.match(Token.DOT);
-      const term = this.parseTerm();
+      const term = this.term();
       return new AST.Abstraction(id, term);
     }  else {
-      return this.parseApplication();
+      return this.application();
     }
   }
 
-  parseApplication() {
-    let lhs = this.parseAtom();
+  application() {
+    let lhs = this.atom();
     while (true) {
-      const rhs = this.parseAtom();
+      const rhs = this.atom();
       if (!rhs) {
         return lhs;
       } else {
@@ -35,9 +35,9 @@ class Parser {
     }
   }
 
-  parseAtom() {
+  atom() {
     if (this.lexer.skip(Token.LPAREN)) {
-      const term = this.parseTerm(Token.RPAREN);
+      const term = this.term(Token.RPAREN);
       this.lexer.match(Token.RPAREN);
       return term;
     } else if (this.lexer.next(Token.LCID)) {
