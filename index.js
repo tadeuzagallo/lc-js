@@ -3,10 +3,11 @@ const Parser = require('./src/parser');
 const Interpreter = require('./src/interpreter');
 
 const fs = require('fs');
+const util = require('util');
 
 let filename;
 let printAST = false;
-if (process.argv[2] === 'ast') {
+if (process.argv[2] === '--ast') {
   printAST = true;
   filename = process.argv[3];
 } else {
@@ -20,7 +21,11 @@ const parser = new Parser(lexer);
 const ast = parser.parse();
 
 if (printAST) {
-  console.log(ast);
+  const output = util.inspect(ast, {
+    depth: null,
+    colors: true,
+  });
+  console.log(output);
 } else {
   console.log(Interpreter.eval(ast).toString());
 }
