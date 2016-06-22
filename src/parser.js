@@ -7,11 +7,16 @@ class Parser {
   }
 
   parse() {
-    const result = this.term(Token.EOF);
+    const result = this.term();
+
+    // make sure we consumed all the program, otherwise there was a syntax error
     this.lexer.match(Token.EOF);
+
     return result;
   }
 
+  // Term ::= LAMBDA LCID DOT Term
+  //        | Application
   term() {
     if (this.lexer.skip(Token.LAMBDA)) {
       const id = new AST.Identifier(this.lexer.token(Token.LCID).value);
@@ -23,8 +28,12 @@ class Parser {
     }
   }
 
+  // Application ::= Atom Application'
   application() {
     let lhs = this.atom();
+
+    // Application' ::= ε
+    //                | Atom Application'
     while (true) {
       const rhs = this.atom();
       if (!rhs) {
@@ -35,6 +44,8 @@ class Parser {
     }
   }
 
+  // Atom ::= LPAREN Term RPAREN
+  //        | LCID
   atom() {
     if (this.lexer.skip(Token.LPAREN)) {
       const term = this.term(Token.RPAREN);

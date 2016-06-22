@@ -8,6 +8,9 @@ class Lexer {
     this._nextToken();
   }
 
+  /**
+   * Return the next char of the input or '\0' if we've reached the end
+   */
   _nextChar() {
     if (this._index >= this._input.length) {
       return '\0';
@@ -16,6 +19,12 @@ class Lexer {
     return this._input[this._index++];
   }
 
+  /**
+   * Set this._token based on the remaining of the input
+   *
+   * This method is meant to be private, it doesn't return a token, just sets
+   * up the state for the helper functions.
+   */
   _nextToken() {
     let c;
     do {
@@ -43,7 +52,7 @@ class Lexer {
       case '\0':
         this._token = new Token(Token.EOF);
         break;
-      
+
       default:
         if (/[a-z]/.test(c)) {
           let str = '';
@@ -62,27 +71,38 @@ class Lexer {
     }
   }
 
+  /**
+   * Assert that the next token has the given type, return it, and skip to the
+   * next token.
+   */
   token(type) {
     if (!type) {
       return this._token;
     }
 
-    if (this.next(type)) {
-      const token = this._token;
-      this._nextToken();
-      return token;
-    }
-    this.fail();
+    const token = this._token;
+    this.match(type);
+    return token;
   }
 
+  /**
+   * Throw an unexpected token error - ideally this would print the source
+   * location
+   */
   fail() {
     throw new Error(`Unexpected token at offset ${this._index}`);
   }
 
+  /**
+   * Returns a boolean indicating whether the next token has the given type.
+   */
   next(type) {
     return this._token.type == type;
   }
 
+  /**
+   * Assert that the next token has the given type and skip it.
+   */
   match(type) {
     if (this.next(type)) {
       this._nextToken();
@@ -92,6 +112,9 @@ class Lexer {
     throw new Error('Parse Error');
   }
 
+  /**
+   * Same as `next`, but skips the token if it matches the expected type.
+   */
   skip(type) {
     if (this.next(type)) {
       this._nextToken();

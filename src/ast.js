@@ -1,4 +1,8 @@
 class Abstraction {
+  /**
+   * param here is the name of the variable of the abstraction. Body is the
+   * subtree  representing the body of the abstraction.
+   */
   constructor(param, body) {
     this.param = param;
     this.body = body;
@@ -10,6 +14,9 @@ class Abstraction {
 }
 
 class Application {
+  /**
+   * (lhs rhs) - left-hand side and right-hand side of an application.
+   */
   constructor(lhs, rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
@@ -21,6 +28,9 @@ class Application {
 }
 
 class Identifier {
+  /**
+   * name is the string matched for this identifier.
+   */
   constructor(name) {
     this.name = name;
   }
