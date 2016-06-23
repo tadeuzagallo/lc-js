@@ -32,8 +32,8 @@ class Parser {
   application() {
     let lhs = this.atom();
 
-    // Application' ::= ε
-    //                | Atom Application'
+    // Application' ::= Atom Application'
+    //                | ε
     while (true) {
       const rhs = this.atom();
       if (!rhs) {
