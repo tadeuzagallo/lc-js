@@ -77,12 +77,12 @@ class Lexer {
    */
   token(type) {
     if (!type) {
-      return this._token;
+      return this._token.value;
     }
 
     const token = this._token;
     this.match(type);
-    return token;
+    return token.value;
   }
 
   /**
@@ -108,7 +108,7 @@ class Lexer {
       this._nextToken();
       return;
     }
-    console.error(`${this._index}: Invalid token: Expected '${type}' found '${this.token().type}'`);
+    console.error(`${this._index}: Invalid token: Expected '${type}' found '${this._token.type}'`);
     throw new Error('Parse Error');
   }
 

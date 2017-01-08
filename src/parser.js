@@ -7,35 +7,34 @@ class Parser {
   }
 
   parse() {
-    const result = this.term();
-
+    const result = this.term([]);
     // make sure we consumed all the program, otherwise there was a syntax error
     this.lexer.match(Token.EOF);
 
     return result;
   }
 
-  // Term ::= LAMBDA LCID DOT Term
-  //        | Application
-  term() {
+  // term ::= LAMBDA LCID DOT term
+  //        | application
+  term(ctx) {
     if (this.lexer.skip(Token.LAMBDA)) {
-      const id = new AST.Identifier(this.lexer.token(Token.LCID).value);
+      const id = this.lexer.token(Token.LCID);
       this.lexer.match(Token.DOT);
-      const term = this.term();
+      const term = this.term([id].concat(ctx));
       return new AST.Abstraction(id, term);
     }  else {
-      return this.application();
+      return this.application(ctx);
     }
   }
 
-  // Application ::= Atom Application'
-  application() {
-    let lhs = this.atom();
+  // application ::= atom application'
+  application(ctx) {
+    let lhs = this.atom(ctx);
 
-    // Application' ::= Atom Application'
+    // application' ::= atom application'
     //                | ε
     while (true) {
-      const rhs = this.atom();
+      const rhs = this.atom(ctx);
       if (!rhs) {
         return lhs;
       } else {
@@ -44,16 +43,16 @@ class Parser {
     }
   }
 
-  // Atom ::= LPAREN Term RPAREN
+  // atom ::= LPAREN term RPAREN
   //        | LCID
-  atom() {
+  atom(ctx) {
     if (this.lexer.skip(Token.LPAREN)) {
-      const term = this.term(Token.RPAREN);
+      const term = this.term(ctx);
       this.lexer.match(Token.RPAREN);
       return term;
     } else if (this.lexer.next(Token.LCID)) {
-      const id = new AST.Identifier(this.lexer.token(Token.LCID).value);
-      return id;
+      const id = this.lexer.token(Token.LCID)
+      return new AST.Identifier(ctx.indexOf(id));
     } else {
       return undefined;
     }

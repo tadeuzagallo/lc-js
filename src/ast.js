@@ -8,8 +8,8 @@ class Abstraction {
     this.body = body;
   }
 
-  toString() {
-    return `(λ${this.param.toString()}. ${this.body.toString()})`;
+  toString(ctx=[]) {
+    return `(λ${this.param}. ${this.body.toString([this.param].concat(ctx))})`;
   }
 }
 
@@ -22,8 +22,8 @@ class Application {
     this.rhs = rhs;
   }
 
-  toString() {
-    return `${this.lhs.toString()} ${this.value.toString()}`;
+  toString(ctx) {
+    return `${this.lhs.toString(ctx)} ${this.rhs.toString(ctx)}`;
   }
 }
 
@@ -31,12 +31,12 @@ class Identifier {
   /**
    * name is the string matched for this identifier.
    */
-  constructor(name) {
-    this.name = name;
+  constructor(value) {
+    this.value = value;
   }
 
-  toString() {
-    return this.name;
+  toString(ctx) {
+    return ctx[this.value];
   }
 }
 
