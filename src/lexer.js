@@ -49,12 +49,32 @@ class Lexer {
         this._token = new Token(Token.RPAREN);
         break;
 
+      case '=':
+        this._token = new Token(Token.EQ);
+        break;
+
+      case ';':
+        this._token = new Token(Token.SEMI);
+        break;
+
       case '\0':
         this._token = new Token(Token.EOF);
         break;
 
       default:
-        if (/[a-z]/.test(c)) {
+        if (this.matchString('true')) {
+          this._token = new Token(Token.BOOLEAN_LITERAL, true);
+        } else if (this.matchString('false')) {
+          this._token = new Token(Token.BOOLEAN_LITERAL, false);
+        } else if (this.matchString('let')) {
+          this._token = new Token(Token.LET);
+        } else if (this.matchString('if')) {
+          this._token = new Token(Token.IF);
+        } else if (this.matchString('then')) {
+          this._token = new Token(Token.THEN);
+        } else if (this.matchString('else')) {
+          this._token = new Token(Token.ELSE);
+        } else if (/[a-z]/.test(c)) {
           let str = '';
           do {
             str += c;
@@ -65,6 +85,17 @@ class Lexer {
           this._index--;
 
           this._token = new Token(Token.LCID, str);
+        } else if (/[0-9]/.test(c)) {
+          let str = '';
+          do {
+            str += c;
+            c = this._nextChar();
+          } while (/[0-9]/.test(c));
+
+          // put back the last char which is not part of the identifier
+          this._index--;
+
+          this._token = new Token(Token.NUMERIC_LITERAL, parseInt(str, 10));
         } else {
           this.fail();
         }
@@ -121,6 +152,21 @@ class Lexer {
       return true;
     }
     return false;
+  }
+
+  matchString(str) {
+    const index = this._index - 1;
+    let i = 0;
+    for (; i < str.length; i++) {
+      if (str[i] !== this._input[index+i]) {
+        return false;
+      }
+    }
+    if (/\w/.test(this._input[index+i])) {
+      return false;
+    }
+    this._index += str.length - 1;
+    return true;
   }
 }
 

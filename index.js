@@ -27,5 +27,5 @@ if (printAST) {
   });
   console.log(output);
 } else {
-  console.log(Interpreter.eval(ast).toString());
+  Interpreter.eval(ast);
 }

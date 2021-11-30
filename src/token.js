@@ -13,10 +13,18 @@ class Token {
 [
   'EOF', // we augment the tokens with EOF, to indicate the end of the input.
   'LAMBDA',
+  'LET',
+  'IF',
+  'THEN',
+  'ELSE',
   'LPAREN',
   'RPAREN',
   'LCID',
   'DOT',
+  'EQ',
+  'SEMI',
+  'BOOLEAN_LITERAL',
+  'NUMERIC_LITERAL',
 ].forEach(token => Token[token] = token);
 
 module.exports = Token;
